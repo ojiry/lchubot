@@ -10,6 +10,9 @@
 
 module.exports = (robot) ->
 
+  robot.respond /ping/i, (res) ->
+    res.reply "pong"
+
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #
