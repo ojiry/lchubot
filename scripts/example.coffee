@@ -8,10 +8,22 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
+CronJob = require('cron').CronJob
+random = require('hubot').Response::random
+
 module.exports = (robot) ->
 
   robot.hear /草野/i, (res) ->
     res.send 'こ、この生き方はだめです'
+
+  new CronJob '0 30 22 * * *', () ->
+    robot.send { room: "#general" }, random([
+      'あーいい天気ですねぇ　いい風ですねぇ',
+      'ちがいます　これはパンダじゃないですよ',
+      '大丈夫です　きっとすぐに友達もできます',
+      '私　晴れ女だからイベントはずっと晴れるんですよー'
+    ])
+  , null, true, "Asia/Tokyo"
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
