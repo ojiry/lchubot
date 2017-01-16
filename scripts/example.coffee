@@ -30,7 +30,7 @@ module.exports = (robot) ->
     robot.http('http://lcapi.herokuapp.com')
       .header('Accept', 'application/json')
       .path('users')
-      .get() (err, res, body) ->
+      .get() (err, resp, body) ->
         users = JSON.parse body
         usernames = []
         for user in users
