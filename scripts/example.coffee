@@ -26,6 +26,17 @@ module.exports = (robot) ->
     ])
   , null, true, "Asia/Tokyo"
 
+  robot.respond /users/i, (res) ->
+    robot.http('http://lcapi.herokuapp.com')
+      .header('Accept', 'application/json')
+      .path('users')
+      .get() (err, res, body) ->
+        users = JSON.parse body
+        usernames = []
+        for user in users
+          usernames.push(user['username'])
+        res.send usernames.join(', ')
+
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #
