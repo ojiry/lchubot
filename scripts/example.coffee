@@ -26,9 +26,9 @@ module.exports = (robot) ->
     ])
   , null, true, "Asia/Tokyo"
 
-  robot.respond /users/i, (res) ->
+  robot.respond /users all/i, (res) ->
     robot.http('http://lcapi.herokuapp.com')
-      .header('Accept', 'application/json')
+      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
       .path('users')
       .get() (err, resp, body) ->
         users = JSON.parse body
