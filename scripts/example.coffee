@@ -43,13 +43,10 @@ module.exports = (robot) ->
   robot.respond /users (.*)/i, (res) ->
     username = res.match[1].replace(/@/g, '')
     unless username == 'all'
-      data = JSON.stringify({
-        username: username
-      })
       robot.http('http://lcapi.herokuapp.com')
         .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
-        .path('users')
-        .get(data) (err, resp, body) ->
+        .path("users/#{username}")
+        .get() (err, resp, body) ->
           user = JSON.parse body
           res.send "#{user['username']}: #{user['email']}"
 
