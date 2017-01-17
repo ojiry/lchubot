@@ -122,7 +122,7 @@ module.exports = (robot) ->
       )
       .path('events')
       .post(data) (err, resp, body) ->
-        if resp.statusCode isnt 200
+        if resp.statusCode isnt 201
           res.send 'イベントの作成に失敗しちゃいました'
         else
           res.send 'イベントを作成しました！'
