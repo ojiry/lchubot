@@ -40,6 +40,19 @@ module.exports = (robot) ->
           usernames.push(user['username'])
         res.send usernames.join(', ')
 
+  robot.respond /users (.*)/i, (res) ->
+    username = res.match[1].replace(/@/g, '')
+    unless username == 'all'
+      data = JSON.stringify({
+        username: username
+      })
+      robot.http('http://lcapi.herokuapp.com')
+        .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
+        .path('users')
+        .get(data) (err, resp, body) ->
+          user = JSON.parse body
+          res.send "#{user['username']}: #{user['email']}"
+
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #
