@@ -13,6 +13,61 @@ random = require('hubot').Response::random
 
 module.exports = (robot) ->
 
+  robot.respond /users all/i, (res) ->
+    robot.http('http://lcapi.herokuapp.com')
+      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
+      .path('users')
+      .get() (err, resp, body) ->
+        users = JSON.parse body
+        usernames = []
+        for user in users
+          usernames.push(user['username'])
+        res.send usernames.join(', ')
+
+  robot.respond /users (.*)/i, (res) ->
+    username = res.match[1].replace(/@/g, '')
+    unless username == 'all'
+      robot.http('http://lcapi.herokuapp.com')
+        .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
+        .path("users/#{username}")
+        .get() (err, resp, body) ->
+          user = JSON.parse body
+          res.send "#{user['username']}: #{user['email']}"
+
+  robot.respond /events all/i, (res) ->
+    robot.http('http://lcapi.herokuapp.com')
+      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
+      .path('events')
+      .get() (err, resp, body) ->
+        events = JSON.parse body
+        if 0 < events.length
+          titles = []
+          for event in events
+            titles.push(event['title'])
+          res.send titles.join(', ')
+        else
+          res.send 'イベントはありませんでしたー'
+
+  robot.respond /events create (.*) (.*) (.*)/i, (res) ->
+    data = JSON.stringify({
+      title: res.match[1],
+      scheduled_at: res.match[2],
+      place: res.match[3],
+      username: res.message.user.name
+    })
+    robot.http('http://lcapi.herokuapp.com')
+      .headers(
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Token #{process.env.ACCESS_TOKEN}"
+      )
+      .path('events')
+      .post(data) (err, resp, body) ->
+        if resp.statusCode is 201
+          res.send 'イベントを作成しました！'
+        else
+          res.send 'イベントの作成に失敗しちゃいました'
+
   robot.hear /草野/i, (res) ->
     res.send 'こ、この生き方はだめです'
 
@@ -70,62 +125,6 @@ module.exports = (robot) ->
       'びっくりしてください！ びっくりしてください！ わーっ わーっ'
     ])
   , null, true, "Asia/Tokyo"
-
-  robot.respond /users all/i, (res) ->
-    robot.http('http://lcapi.herokuapp.com')
-      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
-      .path('users')
-      .get() (err, resp, body) ->
-        users = JSON.parse body
-        usernames = []
-        for user in users
-          usernames.push(user['username'])
-        res.send usernames.join(', ')
-
-  robot.respond /users (.*)/i, (res) ->
-    username = res.match[1].replace(/@/g, '')
-    unless username == 'all'
-      robot.http('http://lcapi.herokuapp.com')
-        .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
-        .path("users/#{username}")
-        .get() (err, resp, body) ->
-          user = JSON.parse body
-          res.send "#{user['username']}: #{user['email']}"
-
-  robot.respond /events all/i, (res) ->
-    robot.http('http://lcapi.herokuapp.com')
-      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
-      .path('events')
-      .get() (err, resp, body) ->
-        events = JSON.parse body
-        if 0 < events.length
-          titles = []
-          for event in events
-            titles.push(event['title'])
-          res.send titles.join(', ')
-        else
-          res.send 'イベントはありませんでしたー'
-
-  robot.respond /events create (.*) (.*) (.*)/i, (res) ->
-    data = JSON.stringify({
-      event: {
-        title: res.match[1],
-        scheduled_at: res.match[2],
-        place: res.match[3]
-      }
-    })
-    robot.http('http://lcapi.herokuapp.com')
-      .headers(
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': "Token #{process.env.ACCESS_TOKEN}"
-      )
-      .path('events')
-      .post(data) (err, resp, body) ->
-        if resp.statusCode isnt 201
-          res.send 'イベントの作成に失敗しちゃいました'
-        else
-          res.send 'イベントを作成しました！'
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
