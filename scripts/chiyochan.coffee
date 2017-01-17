@@ -107,12 +107,17 @@ module.exports = (robot) ->
           res.send 'イベントはありませんでしたー'
 
   robot.respond /events create (.*) (.*) (.*)/i, (res) ->
-    data =
+    data = JSON.stringify({
       'event[title]': res.match[1],
       'event[scheduled_at]': res.match[2],
       'event[place]': res.match[3]
+    })
     robot.http('http://lcapi.herokuapp.com')
-      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
+      .headers(
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Token #{process.env.ACCESS_TOKEN}"
+      )
       .path('events')
       .post(data) (err, resp, body) ->
         if resp.statusCode isnt 200
