@@ -106,6 +106,20 @@ module.exports = (robot) ->
         else
           res.send 'イベントはありませんでしたー'
 
+  robot.respond /events create (.*) (.*) (.*)/i, (res) ->
+    data =
+      'title': res.match[1],
+      'scheduled_at': res.match[2],
+      'place': res.match[3]
+    robot.http('http://lcapi.herokuapp.com')
+      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
+      .path('events')
+      .post(data) (err, resp, body) ->
+        if resp.statusCode isnt 200
+          res.send 'イベントの作成に失敗しちゃいました'
+        else
+          res.send 'イベントを作成しました！'
+
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #
