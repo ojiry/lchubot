@@ -108,9 +108,9 @@ module.exports = (robot) ->
 
   robot.respond /events create (.*) (.*) (.*)/i, (res) ->
     data =
-      'title': res.match[1],
-      'scheduled_at': res.match[2],
-      'place': res.match[3]
+      'event[title]': res.match[1],
+      'event[scheduled_at]': res.match[2],
+      'event[place]': res.match[3]
     robot.http('http://lcapi.herokuapp.com')
       .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
       .path('events')
