@@ -16,8 +16,11 @@ module.exports = (robot) ->
   robot.hear /草野/i, (res) ->
     res.send 'こ、この生き方はだめです'
 
-  robot.hear /ちよちゃんはなんでとぶのんー？/i, (res) ->
+  robot.hear /ちよちゃんはなんでとぶのん/i, (res) ->
     res.send '10歳ですけどー'
+
+  robot.hear /このガキ海にたたきこめ/i, (res) ->
+    res.send 'キャー'
 
   new CronJob '0 0 8 * * *', () ->
     robot.send { room: "#general" }, random([
