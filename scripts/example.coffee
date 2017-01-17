@@ -92,6 +92,20 @@ module.exports = (robot) ->
           user = JSON.parse body
           res.send "#{user['username']}: #{user['email']}"
 
+  robot.respond /events all/i, (res) ->
+    robot.http('http://lcapi.herokuapp.com')
+      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
+      .path('events')
+      .get() (err, resp, body) ->
+        events = JSON.parse body
+        if 0 < events.length
+          titles = []
+          for event in events
+            titles.push(event['title'])
+          res.send titles.join(', ')
+        else
+          res.send 'イベントはありませんでしたー'
+
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #
