@@ -13,7 +13,7 @@ random = require('hubot').Response::random
 
 module.exports = (robot) ->
 
-  robot.respond /users all/i, (res) ->
+  robot.respond /部員一覧/i, (res) ->
     robot.http('http://lcapi.herokuapp.com')
       .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
       .path('users')
@@ -22,7 +22,10 @@ module.exports = (robot) ->
         usernames = []
         for user in users
           usernames.push(user['username'])
-        res.send usernames.join(', ')
+        res.send """
+部員さんですねーこちらになります
+#{usernames.join(', ')}
+        """
 
   robot.respond /users (.*)/i, (res) ->
     username = res.match[1].replace(/@/g, '')
