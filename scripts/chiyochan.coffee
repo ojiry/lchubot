@@ -47,20 +47,20 @@ email: #{user['email']}
       .get() (err, resp, body) ->
         events = JSON.parse body
         if 0 < events.length
-          titles = []
+          names = []
           for event in events
-            titles.push(event['title'])
-            robot.brain.set event['title'], event['id']
+            names.push(event['name'])
+            robot.brain.set event['name'], event['id']
           res.send """
 こんなイベントがあるみたいです
-#{titles.join(', ')}
+#{names.join(', ')}
 """
         else
           res.send 'イベントはありませんでしたー'
 
   robot.respond /events create (.*) (.*) (.*)/i, (res) ->
     data = JSON.stringify({
-      title: res.match[1],
+      name: res.match[1],
       scheduled_at: res.match[2],
       place: res.match[3],
       username: res.message.user.name
