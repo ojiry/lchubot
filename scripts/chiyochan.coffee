@@ -23,19 +23,22 @@ module.exports = (robot) ->
         for user in users
           usernames.push(user['username'])
         res.send """
-部員さんですねーこちらになります
+部員さんですねー こちらになります
 #{usernames.join(', ')}
         """
 
-  robot.respond /users (.*)/i, (res) ->
+  robot.respond /部員詳細 (.*)/i, (res) ->
     username = res.match[1].replace(/@/g, '')
-    unless username == 'all'
-      robot.http('http://lcapi.herokuapp.com')
-        .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
-        .path("users/#{username}")
-        .get() (err, resp, body) ->
-          user = JSON.parse body
-          res.send "#{user['username']}: #{user['email']}"
+    robot.http('http://lcapi.herokuapp.com')
+      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
+      .path("users/#{username}")
+      .get() (err, resp, body) ->
+        user = JSON.parse body
+        res.send """
+#{user['username']} さんですねー
+連絡先はこちらみたいです
+email: #{user['email']}
+        """
 
   robot.respond /events all/i, (res) ->
     robot.http('http://lcapi.herokuapp.com')
