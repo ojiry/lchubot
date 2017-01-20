@@ -40,7 +40,7 @@ module.exports = (robot) ->
 email: #{user['email']}
         """
 
-  robot.respond /events all/i, (res) ->
+  robot.respond /イベント一覧/i, (res) ->
     robot.http('http://lcapi.herokuapp.com')
       .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
       .path('events')
@@ -50,7 +50,11 @@ email: #{user['email']}
           titles = []
           for event in events
             titles.push(event['title'])
-          res.send titles.join(', ')
+            robot.brain.set event['title'], event['id']
+          res.send """
+こんなイベントがあるみたいです
+#{titles.join(', ')}
+"""
         else
           res.send 'イベントはありませんでしたー'
 
