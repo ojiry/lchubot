@@ -58,7 +58,7 @@ email: #{user['email']}
         else
           res.send 'イベントはありませんでしたー'
 
-  robot.respond /events create (.*) (.*) (.*)/i, (res) ->
+  robot.respond /イベント作成 (.*) (.*) (.*)/i, (res) ->
     data = JSON.stringify({
       name: res.match[1],
       scheduled_at: res.match[2],
@@ -77,9 +77,6 @@ email: #{user['email']}
           res.send 'イベントを作成しました！'
         else
           res.send 'イベントの作成に失敗しちゃいました'
-
-  robot.hear /草野/i, (res) ->
-    res.send 'こ、この生き方はだめです'
 
   robot.hear /ちよちゃんはなんでとぶのん/i, (res) ->
     res.send '10歳ですけどー'
