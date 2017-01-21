@@ -72,7 +72,10 @@ module.exports = (robot) ->
   robot.hear /この犬は/i, (res) ->
     res.send 'うちで飼ってる忠吉さんです'
 
-  new CronJob '0 0 8-20 * * *', () ->
+  new CronJob '0 0 8 * * *', () ->
+    robot.send { room: '#general' }, '<!channel> みなさんおはようございますー'
+
+  new CronJob '0 0 9-20 * * *', () ->
     robot.send { room: "#general" }, random([
       'み 美浜ちよです よろしくお願いします',
       '同級生ですから…',
@@ -102,7 +105,8 @@ module.exports = (robot) ->
       'ちがいます これはパンダじゃないですよ',
       '大丈夫です きっとすぐに友達もできます',
       '私 晴れ女だからイベントはずっと晴れるんですよー',
-      'びっくりしてください！ びっくりしてください！ わーっ わーっ'
+      'びっくりしてください！ びっくりしてください！ わーっ わーっ',
+      'ここは「おせんみこちゃ」と呼ばれたお祈りの部屋なんだって'
     ])
   , null, true, "Asia/Tokyo"
 
