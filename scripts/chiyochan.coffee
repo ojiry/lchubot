@@ -73,7 +73,7 @@ module.exports = (robot) ->
     res.send 'うちで飼ってる忠吉さんです'
 
   new CronJob '0 0 8 * * *', () ->
-    robot.send { room: '#general' }, '<!channel> みなさんおはようございますー'
+    robot.send { room: '#general' }, '<!channel> みなさんおはようございますー', null, true, 'Asia/Tokyo'
 
   # new CronJob '0 0 9-20 * * *', () ->
   #   robot.send { room: "#general" }, random([
