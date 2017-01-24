@@ -70,12 +70,15 @@ chiyochan 募集 飲み会 2017-01-25 秋葉原
       .path("events/#{event_id}")
       .get() (err, resp, body) ->
         event = JSON.parse body
+        users = []
+        for user in event['applied_users']
+          users.push user['username']
         res.send """
 ID: #{event['id']}
 部活名: #{event['name']}
 日時: #{event['scheduled_at']}
 場所: #{event['place']}
-参加者: 
+参加者: #{users.join(', ')}
 """
 
   robot.respond /参加 (.*)/i, (res) ->
