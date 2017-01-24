@@ -30,7 +30,7 @@ module.exports = (robot) ->
         if 0 < events.length
           names = []
           for event in events
-            names.push(event['name'])
+            names.push("#{event['id']}:#{event['name']}")
           res.send """
 こんなイベントがあるみたいです
 #{names.join(', ')}
@@ -65,20 +65,19 @@ chiyochan 募集 飲み会 2017-01-25 秋葉原
   robot.respond /詳細 (.*)/i, (res) ->
     event_id = res.match[1]
     robot.http('https://lcapi.herokuapp.com')
-      .headers(
-        'Accept': 'application/json',
-        'Authorization': "Token #{process.env.ACCESS_TOKEN}"
-      )
+      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
       .path("events/#{event_id}")
-      .get(data) (err, resp, body) ->
+      .get() (err, resp, body) ->
         event = JSON.parse body
         res.send "#{event['name']}"
 
   robot.respond /参加 (.*)/i, (res) ->
     event_id = res.match[1]
+    data = JSON.stringify({ username: res.message.user.name })
     robot.http('https://lcapi.herokuapp.com')
       .headers(
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Authorization': "Token #{process.env.ACCESS_TOKEN}"
       )
       .path("events/#{event_id}/participate")
@@ -90,9 +89,11 @@ chiyochan 募集 飲み会 2017-01-25 秋葉原
 
   robot.respond /不参加 (.*)/i, (res) ->
     event_id = res.match[1]
+    data = JSON.stringify({ username: res.message.user.name })
     robot.http('https://lcapi.herokuapp.com')
       .headers(
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Authorization': "Token #{process.env.ACCESS_TOKEN}"
       )
       .path("events/#{event_id}/decline")
