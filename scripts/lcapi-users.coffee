@@ -16,7 +16,7 @@
 
 module.exports = (robot) ->
   robot.respond /部員一覧/i, (res) ->
-    robot.http('http://lcapi.herokuapp.com')
+    robot.http('https://lcapi.herokuapp.com')
       .headers(
         'Accept': 'application/json',
         'Authorization': "Token #{process.env.ACCESS_TOKEN}"
@@ -34,7 +34,7 @@ module.exports = (robot) ->
 
   robot.respond /部員詳細 (.*)/i, (res) ->
     username = res.match[1].replace(/@/g, '')
-    robot.http('http://lcapi.herokuapp.com')
+    robot.http('https://lcapi.herokuapp.com')
       .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
       .path("users/#{username}")
       .get() (err, resp, body) ->

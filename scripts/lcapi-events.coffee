@@ -19,7 +19,7 @@
 
 module.exports = (robot) ->
   robot.respond /部活動/i, (res) ->
-    robot.http('http://lcapi.herokuapp.com')
+    robot.http('https://lcapi.herokuapp.com')
       .headers(
         'Accept': 'application/json',
         'Authorization': "Token #{process.env.ACCESS_TOKEN}"
@@ -46,7 +46,7 @@ module.exports = (robot) ->
       place: res.match[3],
       username: res.message.user.name
     })
-    robot.http('http://lcapi.herokuapp.com')
+    robot.http('https://lcapi.herokuapp.com')
       .headers(
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ chiyochan 募集 飲み会 2017-01-25 秋葉原
   robot.respond /詳細 (.*)/i, (res) ->
     event_id = robot.brain.get(res.match[1])
     if event_id?
-      robot.http('http://lcapi.herokuapp.com')
+      robot.http('https://lcapi.herokuapp.com')
         .headers(
           'Accept': 'application/json',
           'Authorization': "Token #{process.env.ACCESS_TOKEN}"
@@ -81,7 +81,7 @@ chiyochan 募集 飲み会 2017-01-25 秋葉原
   robot.respond /参加 (.*)/i, (res) ->
     event_id = robot.brain.get res.match[1]
     if event_id?
-      robot.http('http://lcapi.herokuapp.com')
+      robot.http('https://lcapi.herokuapp.com')
         .headers(
           'Accept': 'application/json',
           'Authorization': "Token #{process.env.ACCESS_TOKEN}"
@@ -98,7 +98,7 @@ chiyochan 募集 飲み会 2017-01-25 秋葉原
   robot.respond /不参加 (.*)/i, (res) ->
     event_id = robot.brain.get res.match[1]
     if event_id?
-      robot.http('http://lcapi.herokuapp.com')
+      robot.http('https://lcapi.herokuapp.com')
         .headers(
           'Accept': 'application/json',
           'Authorization': "Token #{process.env.ACCESS_TOKEN}"
