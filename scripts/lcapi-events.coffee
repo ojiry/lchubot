@@ -31,7 +31,7 @@ module.exports = (robot) ->
           names = []
           for event in events
             names.push(event['name'])
-            robot.brain.set event['name'], event['id']
+            robot.brain.set(event['name'], event['id'])
           res.send """
 こんなイベントがあるみたいです
 #{names.join(', ')}
@@ -64,7 +64,7 @@ chiyochan 募集 飲み会 2017-01-25 秋葉原
 """
 
   robot.respond /詳細 (.*)/i, (res) ->
-    event_id = robot.brain.get res.match[1]
+    event_id = robot.brain.get(res.match[1])
     if event_id?
       robot.http('http://lcapi.herokuapp.com')
         .headers(
