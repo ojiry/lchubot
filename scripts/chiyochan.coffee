@@ -72,7 +72,7 @@ module.exports = (robot) ->
   robot.hear /この犬は/i, (res) ->
     res.send 'うちで飼ってる忠吉さんです'
 
-  new CronJob '0 0 8 * * *', () ->
+  new CronJob '0 0 8 * * 1-5', () ->
     robot.send { room: '#general' }, '<!channel> みなさんおはようございますー'
   , null, true, 'Asia/Tokyo'
 
