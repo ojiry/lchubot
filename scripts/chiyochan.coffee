@@ -13,44 +13,6 @@ random = require('hubot').Response::random
 
 module.exports = (robot) ->
 
-  robot.respond /イベント一覧/i, (res) ->
-    robot.http('http://lcapi.herokuapp.com')
-      .headers('Accept': 'application/json', 'Authorization': "Token #{process.env.ACCESS_TOKEN}")
-      .path('events')
-      .get() (err, resp, body) ->
-        events = JSON.parse body
-        if 0 < events.length
-          names = []
-          for event in events
-            names.push(event['name'])
-            robot.brain.set event['name'], event['id']
-          res.send """
-こんなイベントがあるみたいです
-#{names.join(', ')}
-"""
-        else
-          res.send 'イベントはありませんでしたー'
-
-  robot.respond /イベント作成 (.*) (.*) (.*)/i, (res) ->
-    data = JSON.stringify({
-      name: res.match[1],
-      scheduled_at: res.match[2],
-      place: res.match[3],
-      username: res.message.user.name
-    })
-    robot.http('http://lcapi.herokuapp.com')
-      .headers(
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': "Token #{process.env.ACCESS_TOKEN}"
-      )
-      .path('events')
-      .post(data) (err, resp, body) ->
-        if resp.statusCode is 201
-          res.send 'イベントを作成しました！'
-        else
-          res.send 'イベントの作成に失敗しちゃいました'
-
   robot.hear /ちよちゃんはなんでとぶのん/i, (res) ->
     res.send '10歳ですけどー'
 
