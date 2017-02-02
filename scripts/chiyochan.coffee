@@ -35,8 +35,14 @@ module.exports = (robot) ->
     res.send 'うちで飼ってる忠吉さんです'
 
   new CronJob '0 0 8 * * 1-5', () ->
-    robot.send { room: '#general' }, '<!channel> みなさんおはようございますー'
+    robot.send { room: '#general' }, """
+<!channel> みなさんおはようございますー
+今日も一生懸命おしごとがんばりましょー！
+"""
   , null, true, 'Asia/Tokyo'
+
+  robot.respond /あ/i, (res) ->
+    res.reply '何か用事でしょうか？'
 
   # new CronJob '0 0 9-20 * * *', () ->
   #   robot.send { room: "#general" }, random([
