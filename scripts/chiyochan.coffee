@@ -44,6 +44,12 @@ module.exports = (robot) ->
   robot.respond /あ/i, (res) ->
     res.reply '何か用事でしょうか？'
 
+  robot.respond /おはよう/i, (res) ->
+    res.reply """
+おはようございます。
+今日も一日、がんばってくださいね。
+    """
+
   # new CronJob '0 0 9-20 * * *', () ->
   #   robot.send { room: "#general" }, random([
   #     'み 美浜ちよです よろしくお願いします',
