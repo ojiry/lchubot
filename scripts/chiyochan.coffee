@@ -36,7 +36,7 @@ module.exports = (robot) ->
 
   new CronJob '0 0 8 * * 1-5', () ->
     robot.send { room: '#general' }, """
-<!channel> みなさんおはようございますー
+みなさんおはようございますー
 今日も一生懸命おしごとがんばりましょー！
 """
   , null, true, 'Asia/Tokyo'
